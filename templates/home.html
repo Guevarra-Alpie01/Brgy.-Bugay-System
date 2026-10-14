@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Barangay Documents{% endblock %}
+{% block content %}
+<h1>Barangay Document Services</h1>
+<p>Choose a document to fill out and prepare a printable draft.</p>
+<div class="document-list">
+    {% for name, url_name in documents %}
+    <article class="document-card">
+        <h2>{{ name }}</h2>
+        <a href="{% url url_name %}">Open {{ name }}</a>
+    </article>
+    {% endfor %}
+</div>
+{% endblock %}

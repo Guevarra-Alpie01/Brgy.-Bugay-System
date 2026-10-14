@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block title %}Certificate of Indigent{% endblock %}
+{% block content %}
+<h1>Certificate of Indigent</h1>
+<p>Enter household details to prepare an indigency certificate draft.</p>
+<form method="post">{% csrf_token %}{{ form.as_p }}<button type="submit">Prepare certificate</button></form>
+{% endblock %}

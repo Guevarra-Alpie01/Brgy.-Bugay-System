@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block title %}Barangay Clearance{% endblock %}
+{% block content %}
+<h1>Barangay Clearance</h1>
+<p>Enter the resident and purpose details to prepare a clearance draft.</p>
+<form method="post">{% csrf_token %}{{ form.as_p }}<button type="submit">Prepare clearance</button></form>
+{% endblock %}

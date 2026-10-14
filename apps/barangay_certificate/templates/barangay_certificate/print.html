@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Barangay Certificate Draft{% endblock %}
+{% block content %}
+<div class="document-actions"><a href="{% url 'barangay_certificate:create' %}">Back</a> <button type="button" onclick="window.print()">Print</button></div>
+<article class="print-document">
+    <header class="document-heading"><p>REPUBLIC OF THE PHILIPPINES</p><p>BARANGAY ______________________________</p><p>OFFICE OF THE PUNONG BARANGAY</p></header>
+    <h1>BARANGAY CERTIFICATE</h1>
+    <p>This is to certify that <strong>{{ form.cleaned_data.full_name }}</strong>, of {{ form.cleaned_data.address }}, is hereby certified as follows:</p>
+    <p>{{ form.cleaned_data.certified_information }}</p>
+    <p>This certification is issued for {{ form.cleaned_data.purpose }} on {{ form.cleaned_data.date_issued|date:"F j, Y" }}.</p>
+    <div class="signature-row"><div>______________________________<br>Barangay Secretary</div><div>______________________________<br>Punong Barangay</div></div>
+    <p class="draft-notice">DRAFT — Not official until verified, approved, and signed by an authorized barangay official.</p>
+</article>
+{% endblock %}

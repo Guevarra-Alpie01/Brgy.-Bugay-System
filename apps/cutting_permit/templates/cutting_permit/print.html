@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Cutting Permit Draft{% endblock %}
+{% block content %}
+<div class="document-actions"><a href="{% url 'cutting_permit:create' %}">Back</a> <button type="button" onclick="window.print()">Print</button></div>
+<article class="print-document">
+    <header class="document-heading"><p>REPUBLIC OF THE PHILIPPINES</p><p>BARANGAY ______________________________</p><p>OFFICE OF THE PUNONG BARANGAY</p></header>
+    <h1>CUTTING PERMIT</h1>
+    <p>Applicant: <strong>{{ form.cleaned_data.applicant_name }}</strong><br>Address: {{ form.cleaned_data.address }}</p>
+    <p>Requested activity: cutting {{ form.cleaned_data.tree_species }} at {{ form.cleaned_data.cutting_location }}.</p>
+    <p>Reason: {{ form.cleaned_data.reason|linebreaksbr }}<br>Proposed date: {{ form.cleaned_data.proposed_date|date:"F j, Y" }}</p>
+    <p>This barangay draft is not a substitute for permits or approvals required under environmental, forestry, or other applicable laws. Work must not begin until all required approvals are obtained.</p>
+    <div class="signature-row"><div>______________________________<br>Applicant</div><div>______________________________<br>Punong Barangay</div></div>
+    <p class="draft-notice">DRAFT — No cutting is authorized by this unsigned draft.</p>
+</article>
+{% endblock %}

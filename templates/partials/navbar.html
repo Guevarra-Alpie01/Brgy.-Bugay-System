@@ -1,0 +1,15 @@
+{% load static %}
+<header class="navbar">
+    <a class="home-logo" href="{% url 'home' %}" aria-label="Home">
+        <img src="{% static 'img/bayawan_seal.png' %}" alt="Bayawan seal">
+    </a>
+    {% if user.is_authenticated %}
+    <div class="navbar-account">
+        <img class="profile-image" src="{% static 'img/user_profile.png' %}" alt="User profile">
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit">Sign out</button>
+        </form>
+    </div>
+    {% endif %}
+</header>

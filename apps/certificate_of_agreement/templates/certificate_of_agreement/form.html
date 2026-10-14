@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block title %}Certificate of Agreement{% endblock %}
+{% block content %}
+<h1>Certificate of Agreement</h1>
+<p>Record the parties and terms they have presented for barangay certification.</p>
+<form method="post">{% csrf_token %}{{ form.as_p }}<button type="submit">Prepare certificate</button></form>
+{% endblock %}
