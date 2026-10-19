@@ -78,6 +78,53 @@ main {
     background: #e5eee8;
 }
 
+.upload-panel {
+    max-width: 42rem;
+    margin-bottom: 2rem;
+    padding: 1.25rem;
+    border: 1px solid #d5d5d5;
+    border-radius: 0.4rem;
+    background: #f8faf8;
+}
+
+.upload-panel h2 {
+    margin-top: 0;
+}
+
+.upload-form {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: 0.75rem 1rem;
+}
+
+.upload-form p {
+    flex: 1 1 14rem;
+    margin: 0;
+}
+
+.upload-form button {
+    min-height: 2.5rem;
+    padding: 0.55rem 1rem;
+    border: 0;
+    border-radius: 0.4rem;
+    color: #fff;
+    background: #28543e;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.upload-form button:hover,
+.upload-form button:focus-visible {
+    background: #173b2c;
+}
+
+.success-message {
+    color: #173b2c;
+    font-weight: 700;
+}
+
 .document-list {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
@@ -96,6 +143,21 @@ main {
 
 .document-card h2 {
     margin-top: 0;
+}
+
+.uploaded-file-list,
+.category-file-list {
+    padding-left: 1.25rem;
+}
+
+.category-file-list li {
+    margin: 0.75rem 0;
+}
+
+.category-file-list span {
+    display: block;
+    color: #52645a;
+    font-size: 0.9rem;
 }
 
 .document-card a,

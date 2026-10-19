@@ -1,13 +1,43 @@
 {% extends 'base.html' %}
 {% block title %}Barangay Documents{% endblock %}
 {% block content %}
+<section class="upload-panel" aria-labelledby="upload-heading">
+    <h2 id="upload-heading">Upload a file</h2>
+    <p>Choose a document classification for the file.</p>
+    {% for message in messages %}
+    <p class="success-message">{{ message }}</p>
+    {% endfor %}
+    <form class="upload-form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <p>
+            <label for="{{ upload_form.category.id_for_label }}">Classification</label>
+            {{ upload_form.category }}
+            {{ upload_form.category.errors }}
+        </p>
+        <p>
+            <label for="{{ upload_form.file.id_for_label }}">File</label>
+            {{ upload_form.file }}
+            {{ upload_form.file.errors }}
+        </p>
+        <button type="submit">Upload file</button>
+    </form>
+</section>
+
 <h1>Barangay Document Services</h1>
 <p>Choose a document to fill out and prepare a printable draft.</p>
 <div class="document-list">
-    {% for name, url_name in documents %}
+    {% for name, url_name, category, category_documents in documents %}
     <article class="document-card">
         <h2>{{ name }}</h2>
-        <a href="{% url url_name %}">Open {{ name }}</a>
+        <p><a href="{% url url_name %}">Create {{ name }}</a></p>
+        <p><a href="{% url 'document_uploads:category' category %}">View uploaded files ({{ category_documents|length }})</a></p>
+        {% if category_documents %}
+        <ul class="uploaded-file-list">
+            {% for uploaded_document in category_documents %}
+            <li><a href="{% url 'document_uploads:file' uploaded_document.pk %}">{{ uploaded_document.original_name }}</a></li>
+            {% endfor %}
+        </ul>
+        {% endif %}
     </article>
     {% endfor %}
 </div>

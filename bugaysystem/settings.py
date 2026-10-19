@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'apps.document_uploads.apps.DocumentUploadsConfig',
     'apps.barangay_clearance.apps.BarangayClearanceConfig',
     'apps.barangay_certificate.apps.BarangayCertificateConfig',
     'apps.certificate_of_indigent.apps.CertificateOfIndigentConfig',

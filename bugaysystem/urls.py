@@ -17,22 +17,50 @@ Including another URLconf
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.contrib import messages
+from django.shortcuts import redirect, render
 from django.urls import include, path
+
+from apps.document_uploads.forms import DocumentUploadForm
+from apps.document_uploads.models import DOCUMENT_CATEGORIES, UploadedDocument
 
 
 @login_required
 def home(request):
+    form = DocumentUploadForm(request.POST or None, request.FILES or None)
+    if request.method == "POST" and form.is_valid():
+        uploaded_document = form.save(commit=False)
+        uploaded_document.uploaded_by = request.user
+        uploaded_document.save()
+        messages.success(request, "File uploaded successfully.")
+        return redirect("home")
+
+    uploads_by_category = {category: [] for category, _ in DOCUMENT_CATEGORIES}
+    for uploaded_document in UploadedDocument.objects.order_by("-uploaded_at"):
+        uploads_by_category[uploaded_document.category].append(uploaded_document)
+
+    category_urls = {
+        "barangay-clearance": "barangay_clearance:create",
+        "barangay-certificate": "barangay_certificate:create",
+        "certificate-of-indigent": "certificate_of_indigent:create",
+        "certificate-of-agreement": "certificate_of_agreement:create",
+        "cattle-clearance": "cattle_clearance:create",
+        "cutting-permit": "cutting_permit:create",
+        "conference-letter": "conference_letter:create",
+    }
     documents = [
-        ("Barangay Clearance", "barangay_clearance:create"),
-        ("Barangay Certificate", "barangay_certificate:create"),
-        ("Certificate of Indigent", "certificate_of_indigent:create"),
-        ("Certificate of Agreement", "certificate_of_agreement:create"),
-        ("Cattle Clearance", "cattle_clearance:create"),
-        ("Cutting Permit", "cutting_permit:create"),
-        ("Conference Letter", "conference_letter:create"),
+        (name, category_urls[category], category, uploads_by_category[category])
+        for category, name in DOCUMENT_CATEGORIES
     ]
-    return render(request, "home.html", {"documents": documents})
+
+    return render(
+        request,
+        "home.html",
+        {
+            "documents": documents,
+            "upload_form": form,
+        },
+    )
 
 urlpatterns = [
     path(
@@ -46,6 +74,7 @@ urlpatterns = [
     path('accounts/logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('', home, name='home'),
     path('admin/', admin.site.urls),
+    path('uploads/', include('apps.document_uploads.urls')),
     path('barangay-clearance/', include('apps.barangay_clearance.urls')),
     path('barangay-certificate/', include('apps.barangay_certificate.urls')),
     path('certificate-of-indigent/', include('apps.certificate_of_indigent.urls')),

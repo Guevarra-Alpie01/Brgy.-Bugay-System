@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}{{ category_name }} Files{% endblock %}
+{% block content %}
+<p><a href="{% url 'home' %}">Back to document services</a></p>
+<h1>{{ category_name }} files</h1>
+{% if documents %}
+<ul class="category-file-list">
+    {% for document in documents %}
+    <li>
+        <a href="{% url 'document_uploads:file' document.pk %}">{{ document.original_name }}</a>
+        <span>Uploaded {{ document.uploaded_at|date:"M j, Y, g:i a" }}</span>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No files have been uploaded to this classification yet.</p>
+{% endif %}
+{% endblock %}

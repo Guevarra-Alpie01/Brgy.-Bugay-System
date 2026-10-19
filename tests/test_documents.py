@@ -1,6 +1,8 @@
 from django.contrib.auth import get_user_model
-from django.test import TestCase
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.test import TestCase, override_settings
 from django.urls import reverse
+from tempfile import TemporaryDirectory
 
 
 DOCUMENTS = (
@@ -54,22 +56,71 @@ class DocumentAppTests(TestCase):
 
         self.assertRedirects(response, reverse("home"))
         home_response = self.client.get(reverse("home"))
-        self.assertContains(home_response, "All documents")
+        self.assertContains(home_response, "Barangay Document Services")
+        self.assertContains(home_response, "Upload a file")
         self.assertContains(home_response, "Sign out")
 
-    def test_sidebar_has_single_toggle_and_document_shortcuts(self):
+    def test_sidebar_is_removed_and_upload_classifications_are_available(self):
         response = self.client.get(reverse("home"))
 
-        self.assertContains(response, 'class="sidebar-toggle"')
-        self.assertContains(response, 'class="sidebar-toggle-closed"')
-        self.assertContains(response, "BC")
-        self.assertContains(response, "CT")
-        self.assertContains(response, "CI")
-        self.assertContains(response, "CA")
-        self.assertContains(response, "CC")
-        self.assertContains(response, "CP")
-        self.assertContains(response, "CL")
-        self.assertNotContains(response, 'class="sidebar-open"')
+        self.assertNotContains(response, 'class="sidebar"')
+        self.assertContains(response, 'enctype="multipart/form-data"')
+        self.assertContains(response, 'name="category"')
+        self.assertContains(response, reverse("document_uploads:category", args=["conference-letter"]))
+
+    def test_upload_is_saved_and_accessible_under_its_classification(self):
+        with TemporaryDirectory() as media_root:
+            with override_settings(MEDIA_ROOT=media_root):
+                response = self.client.post(
+                    reverse("home"),
+                    {
+                        "category": "barangay-clearance",
+                        "file": SimpleUploadedFile(
+                            "clearance.txt",
+                            b"Uploaded document contents",
+                            content_type="text/plain",
+                        ),
+                    },
+                )
+
+                self.assertRedirects(response, reverse("home"))
+                home_response = self.client.get(reverse("home"))
+                self.assertContains(home_response, "clearance.txt")
+
+                category_response = self.client.get(
+                    reverse(
+                        "document_uploads:category",
+                        args=["barangay-clearance"],
+                    )
+                )
+                self.assertContains(category_response, "clearance.txt")
+
+                document = category_response.context["documents"][0]
+                file_response = self.client.get(
+                    reverse("document_uploads:file", args=[document.pk])
+                )
+                self.assertEqual(
+                    b"".join(file_response.streaming_content),
+                    b"Uploaded document contents",
+                )
+                self.assertEqual(
+                    file_response["Content-Disposition"].split(";")[0],
+                    "attachment",
+                )
+
+    def test_upload_routes_require_login(self):
+        self.client.logout()
+        response = self.client.get(
+            reverse(
+                "document_uploads:category",
+                args=["barangay-clearance"],
+            )
+        )
+
+        self.assertRedirects(
+            response,
+            f"{reverse('login')}?next={reverse('document_uploads:category', args=['barangay-clearance'])}",
+        )
 
     def test_failed_login_shows_error(self):
         self.client.logout()
