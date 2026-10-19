@@ -1,7 +1,0 @@
-{% extends 'base.html' %}
-{% block title %}Cutting Permit{% endblock %}
-{% block content %}
-<h1>Cutting Permit</h1>
-<p>Enter the proposed tree-cutting activity. Additional permits may be required from other authorities.</p>
-<form method="post">{% csrf_token %}{{ form.as_p }}<button type="submit">Prepare permit draft</button></form>
-{% endblock %}

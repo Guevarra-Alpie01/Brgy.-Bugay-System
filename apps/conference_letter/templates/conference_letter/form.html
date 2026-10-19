@@ -1,7 +1,0 @@
-{% extends 'base.html' %}
-{% block title %}Conference Letter{% endblock %}
-{% block content %}
-<h1>Conference Letter</h1>
-<p>Enter recipient and conference information to prepare an invitation letter.</p>
-<form method="post">{% csrf_token %}{{ form.as_p }}<button type="submit">Prepare letter</button></form>
-{% endblock %}

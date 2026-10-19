@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block title %}File preview unavailable{% endblock %}
+{% block content %}
+<p><a href="{% url 'document_uploads:category' document.category %}">Back to files</a></p>
+<h1>{{ document.original_name }}</h1>
+<p>This file type cannot be previewed in the browser. Downloading is disabled.</p>
+{% endblock %}

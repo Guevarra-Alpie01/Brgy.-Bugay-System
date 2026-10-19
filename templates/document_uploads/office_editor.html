@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Edit {{ document.original_name }}{% endblock %}
+{% block content %}
+<p><a href="{% url 'document_uploads:category' category %}">Back to {{ category_name }} files</a></p>
+<h1>{{ document.original_name }}</h1>
+<p>Edit the document below. Use the editor's Print option to print it. Downloads are disabled.</p>
+<div
+    id="onlyoffice-editor"
+    data-api-url="{{ onlyoffice_api_url }}"
+    aria-label="Office document editor"
+></div>
+<p id="onlyoffice-error" role="alert" hidden>
+    The local ONLYOFFICE editor is not available. Start the document server and reload this page.
+</p>
+{{ editor_config|json_script:"onlyoffice-config" }}
+{% load static %}
+<script src="{% static 'js/office_editor.js' %}" defer></script>
+{% endblock %}

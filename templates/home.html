@@ -26,10 +26,9 @@
 <h1>Barangay Document Services</h1>
 <p>Choose a document to fill out and prepare a printable draft.</p>
 <div class="document-list">
-    {% for name, url_name, category, category_documents in documents %}
+    {% for name, category, category_documents in documents %}
     <article class="document-card">
         <h2>{{ name }}</h2>
-        <p><a href="{% url url_name %}">Create {{ name }}</a></p>
         <p><a href="{% url 'document_uploads:category' category %}">View uploaded files ({{ category_documents|length }})</a></p>
         {% if category_documents %}
         <ul class="uploaded-file-list">

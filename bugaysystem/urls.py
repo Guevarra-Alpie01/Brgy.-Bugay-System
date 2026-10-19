@@ -39,17 +39,8 @@ def home(request):
     for uploaded_document in UploadedDocument.objects.order_by("-uploaded_at"):
         uploads_by_category[uploaded_document.category].append(uploaded_document)
 
-    category_urls = {
-        "barangay-clearance": "barangay_clearance:create",
-        "barangay-certificate": "barangay_certificate:create",
-        "certificate-of-indigent": "certificate_of_indigent:create",
-        "certificate-of-agreement": "certificate_of_agreement:create",
-        "cattle-clearance": "cattle_clearance:create",
-        "cutting-permit": "cutting_permit:create",
-        "conference-letter": "conference_letter:create",
-    }
     documents = [
-        (name, category_urls[category], category, uploads_by_category[category])
+        (name, category, uploads_by_category[category])
         for category, name in DOCUMENT_CATEGORIES
     ]
 
@@ -75,11 +66,4 @@ urlpatterns = [
     path('', home, name='home'),
     path('admin/', admin.site.urls),
     path('uploads/', include('apps.document_uploads.urls')),
-    path('barangay-clearance/', include('apps.barangay_clearance.urls')),
-    path('barangay-certificate/', include('apps.barangay_certificate.urls')),
-    path('certificate-of-indigent/', include('apps.certificate_of_indigent.urls')),
-    path('certificate-of-agreement/', include('apps.certificate_of_agreement.urls')),
-    path('cattle-clearance/', include('apps.cattle_clearance.urls')),
-    path('cutting-permit/', include('apps.cutting_permit.urls')),
-    path('conference-letter/', include('apps.conference_letter.urls')),
 ]

@@ -1,7 +1,0 @@
-{% extends 'base.html' %}
-{% block title %}Cattle Clearance{% endblock %}
-{% block content %}
-<h1>Cattle Clearance</h1>
-<p>Enter owner, animal, and transport details.</p>
-<form method="post">{% csrf_token %}{{ form.as_p }}<button type="submit">Prepare clearance</button></form>
-{% endblock %}

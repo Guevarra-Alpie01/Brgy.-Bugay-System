@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.1/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,7 +26,14 @@ SECRET_KEY = 'django-insecure-8gbb1c2k^$^@xg*tiwjt-zd*!dwxxttyo2*raxo_f3v-s-)gy*
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in os.environ.get(
+        "ALLOWED_HOSTS",
+        "localhost,127.0.0.1,host.docker.internal,testserver",
+    ).split(",")
+    if host.strip()
+]
 
 
 # Application definition
@@ -38,13 +46,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'apps.document_uploads.apps.DocumentUploadsConfig',
-    'apps.barangay_clearance.apps.BarangayClearanceConfig',
-    'apps.barangay_certificate.apps.BarangayCertificateConfig',
-    'apps.certificate_of_indigent.apps.CertificateOfIndigentConfig',
-    'apps.certificate_of_agreement.apps.CertificateOfAgreementConfig',
-    'apps.cattle_clearance.apps.CattleClearanceConfig',
-    'apps.cutting_permit.apps.CuttingPermitConfig',
-    'apps.conference_letter.apps.ConferenceLetterConfig',
 ]
 
 MIDDLEWARE = [
@@ -126,6 +127,16 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+ONLYOFFICE_DOCUMENT_SERVER_URL = os.environ.get(
+    "ONLYOFFICE_DOCUMENT_SERVER_URL",
+    "http://localhost:8080",
+).rstrip("/")
+ONLYOFFICE_BACKEND_URL = os.environ.get(
+    "ONLYOFFICE_BACKEND_URL",
+    "http://host.docker.internal:8000",
+).rstrip("/")
+ONLYOFFICE_JWT_SECRET = os.environ.get("ONLYOFFICE_JWT_SECRET", SECRET_KEY)
 
 
 # Email

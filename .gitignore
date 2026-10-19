@@ -2,3 +2,9 @@
 __pycache__/
 *.py[cod]
 db.sqlite3
+media/document_uploads/
+media/blotter_attachments/*
+!media/blotter_attachments/.gitkeep
+media/resident_ids/*
+!media/resident_ids/.gitkeep
+.env

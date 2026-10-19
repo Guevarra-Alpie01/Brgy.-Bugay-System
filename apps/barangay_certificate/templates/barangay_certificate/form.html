@@ -1,7 +1,0 @@
-{% extends 'base.html' %}
-{% block title %}Barangay Certificate{% endblock %}
-{% block content %}
-<h1>Barangay Certificate</h1>
-<p>Enter the resident and information to be certified.</p>
-<form method="post">{% csrf_token %}{{ form.as_p }}<button type="submit">Prepare certificate</button></form>
-{% endblock %}

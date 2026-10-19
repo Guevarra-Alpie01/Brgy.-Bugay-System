@@ -3,6 +3,10 @@ setlocal
 
 cd /d "%~dp0"
 
+if exist ".env" (
+    for /f "usebackq eol=# tokens=1,* delims==" %%A in (".env") do set "%%A=%%B"
+)
+
 if not exist ".venv\Scripts\activate.bat" (
     echo Error: the project virtual environment was not found at "%~dp0.venv".
     exit /b 1
@@ -14,4 +18,4 @@ if errorlevel 1 (
     exit /b 1
 )
 
-python manage.py runserver
+python manage.py runserver 0.0.0.0:8000

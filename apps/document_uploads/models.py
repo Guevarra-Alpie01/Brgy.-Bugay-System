@@ -25,6 +25,7 @@ class UploadedDocument(models.Model):
     category = models.CharField(max_length=40, choices=DOCUMENT_CATEGORIES)
     file = models.FileField(upload_to=uploaded_file_path)
     original_name = models.CharField(max_length=255)
+    revision = models.PositiveIntegerField(default=1)
     uploaded_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
