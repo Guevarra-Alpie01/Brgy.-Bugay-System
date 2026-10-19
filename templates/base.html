@@ -10,9 +10,6 @@
 <body class="{% block body_class %}{% endblock %}">
     {% include 'partials/navbar.html' %}
     <div class="layout">
-        {% if user.is_authenticated %}
-            {% include 'partials/sidebar.html' %}
-        {% endif %}
         <main>{% block content %}{% endblock %}</main>
     </div>
     <script src="{% static 'js/app.js' %}" defer></script>
