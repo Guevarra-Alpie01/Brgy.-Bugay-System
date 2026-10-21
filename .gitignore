@@ -1,4 +1,7 @@
 .venv/
+build/
+dist/
+staticfiles/
 __pycache__/
 *.py[cod]
 db.sqlite3

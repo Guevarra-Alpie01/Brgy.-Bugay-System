@@ -27,7 +27,10 @@ from apps.document_uploads.models import DOCUMENT_CATEGORIES, UploadedDocument
 
 @login_required
 def home(request):
-    form = DocumentUploadForm(request.POST or None, request.FILES or None)
+    form = DocumentUploadForm(
+        request.POST if request.method == "POST" else None,
+        request.FILES if request.method == "POST" else None,
+    )
     if request.method == "POST" and form.is_valid():
         uploaded_document = form.save(commit=False)
         uploaded_document.uploaded_by = request.user

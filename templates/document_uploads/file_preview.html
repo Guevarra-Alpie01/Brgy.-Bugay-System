@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}{{ document.original_name }}{% endblock %}
+{% block content %}
+<p><a href="{% url 'document_uploads:category' document.category %}">Back to files</a></p>
+<h1>{{ document.original_name }}</h1>
+{% if is_pdf %}
+<iframe class="document-preview" src="{{ preview_url }}" title="{{ document.original_name }}"></iframe>
+<p>PDFs are viewable and printable here, but PDF editing is not provided by this integration.</p>
+{% else %}
+<img class="document-image-preview" src="{{ preview_url }}" alt="{{ document.original_name }}">
+{% endif %}
+<p><a href="{{ preview_url }}" target="_blank" rel="noopener">Open preview in browser</a></p>
+{% endblock %}

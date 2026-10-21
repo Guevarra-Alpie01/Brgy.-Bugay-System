@@ -3,18 +3,42 @@
 {% block content %}
 <p><a href="{% url 'home' %}">Back to document services</a></p>
 <h1>{{ category_name }} files</h1>
-{% if documents %}
+<p class="office-help">
+    Select a file to open it with its associated viewer or Microsoft Office app.
+</p>
+<div class="document-toolbar">
+    <label for="document-search">Search filenames</label>
+    <input id="document-search" type="search" placeholder="Search this category">
+    <label for="document-type-filter">File type</label>
+    <select id="document-type-filter">
+        <option value="">All file types</option>
+        <option value="word">Word</option>
+        <option value="excel">Excel</option>
+        <option value="other">Other</option>
+    </select>
+</div>
+{% if document_rows %}
 <ul class="category-file-list">
-    {% for document in documents %}
-    <li class="document-file-card">
-        <a href="{% url 'document_uploads:file' document.pk %}">
-            <strong>{{ document.original_name }}</strong>
-            <span>Uploaded {{ document.uploaded_at|date:"M j, Y, g:i a" }}</span>
-        </a>
+    {% for row in document_rows %}
+    <li class="document-file-card"
+        data-document-name="{{ row.document.original_name|lower }}"
+        data-office-kind="{{ row.is_office_file|yesno:'yes,no' }}"
+        data-document-type="{{ row.file_type }}">
+        <div class="document-file-details">
+            <a href="{% url 'document_uploads:file' row.document.pk %}">
+                <strong>{{ row.document.original_name }}</strong>
+            </a>
+            <span>Type: {{ row.file_type }}</span>
+            <span>Location: {{ row.location }}</span>
+            {% if row.modified_at %}
+            <span>Modified: {{ row.modified_at|date:"M j, Y, g:i a" }}</span>
+            {% endif %}
+        </div>
     </li>
     {% endfor %}
 </ul>
 {% else %}
 <p>No files have been uploaded to this classification yet.</p>
 {% endif %}
+<p id="no-document-results" hidden>No matching files in this category.</p>
 {% endblock %}
