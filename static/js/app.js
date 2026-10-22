@@ -85,6 +85,35 @@ document.addEventListener('DOMContentLoaded', function () {
     var search = document.getElementById('document-search');
     var typeFilter = document.getElementById('document-type-filter');
     var noResults = document.getElementById('no-document-results');
+    var emptyFilesToast = document.querySelector('.empty-files-toast');
+    var emptyFilesToastTimeout;
+    var emptyFilesToastHideTimeout;
+
+    function showEmptyFilesToast() {
+        if (!emptyFilesToast) {
+            return;
+        }
+        window.clearTimeout(emptyFilesToastTimeout);
+        window.clearTimeout(emptyFilesToastHideTimeout);
+        emptyFilesToast.hidden = false;
+        emptyFilesToast.classList.remove('is-visible');
+        void emptyFilesToast.offsetWidth;
+        emptyFilesToast.classList.add('is-visible');
+        emptyFilesToastTimeout = window.setTimeout(function () {
+            emptyFilesToast.classList.remove('is-visible');
+            emptyFilesToastHideTimeout = window.setTimeout(function () {
+                emptyFilesToast.hidden = true;
+            }, 180);
+        }, 2000);
+    }
+
+    if (emptyFilesToast && !emptyFilesToast.hidden) {
+        showEmptyFilesToast();
+    }
+
+    document.querySelectorAll('[data-empty-service]').forEach(function (button) {
+        button.addEventListener('click', showEmptyFilesToast);
+    });
 
     function filterDocuments() {
         if (!search || !typeFilter) {

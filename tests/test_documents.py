@@ -78,6 +78,10 @@ class DocumentAppTests(TestCase):
                 self.assertContains(response, label)
                 self.assertContains(
                     response,
+                    f'data-empty-service="{label}"',
+                )
+                self.assertNotContains(
+                    response,
                     reverse("document_uploads:category", args=[category]),
                 )
 
@@ -102,6 +106,22 @@ class DocumentAppTests(TestCase):
             rf'<a href="{reverse("document_uploads:file", args=[older_document.pk])}">Barangay Clearance</a>',
         )
         self.assertNotContains(response, "Manage files")
+
+    def test_empty_category_shows_notice_without_file_filters(self):
+        response = self.client.get(
+            reverse(
+                "document_uploads:category",
+                args=["certificate-of-indigent"],
+            )
+        )
+
+        self.assertContains(response, 'class="empty-files-toast"')
+        self.assertContains(
+            response,
+            "No files have been uploaded to this classification yet.",
+        )
+        self.assertNotContains(response, 'id="document-search"')
+        self.assertNotContains(response, 'id="document-type-filter"')
 
     @patch("apps.document_uploads.views.launch_document")
     def test_office_file_link_launches_document_and_returns_home(
@@ -347,7 +367,7 @@ class DocumentAppTests(TestCase):
         )
 
     @patch("apps.document_uploads.views.launch_document")
-    def test_word_and_excel_file_links_launch_the_associated_office_app(
+    def test_word_and_excel_file_links_launch_without_success_message(
         self,
         launch,
     ):
@@ -359,7 +379,10 @@ class DocumentAppTests(TestCase):
                     follow=True,
                 )
                 self.assertEqual(response.status_code, 200)
-                self.assertContains(response, f"Opened {name} in Microsoft {office_kind}.")
+                self.assertNotContains(
+                    response,
+                    f"Opened {name} in Microsoft {office_kind}.",
+                )
         self.assertEqual(launch.call_count, 2)
 
     def test_category_must_be_valid(self):

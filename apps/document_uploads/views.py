@@ -98,12 +98,6 @@ def view_file(request, pk):
                 f"{OFFICE_FILE_TYPES[extension].title()}. Check that Office "
                 "is installed and the file is available.",
             )
-        else:
-            messages.success(
-                request,
-                f"Opened {document.original_name} in Microsoft "
-                f"{OFFICE_FILE_TYPES[extension].title()}.",
-            )
         return redirect("home")
 
     content_type = INLINE_TYPES.get(extension)

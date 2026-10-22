@@ -3,6 +3,99 @@
     <a class="home-logo" href="{% url 'home' %}" aria-label="Home">
         <img src="{% static 'img/bayawan_seal.png' %}" alt="Bayawan seal">
     </a>
+    {% if upload_form %}
+    <section class="quick-actions" aria-label="Document actions">
+        <div class="quick-action-buttons">
+            <button
+                class="upload-toggle"
+                type="button"
+                {% if upload_form.errors %}
+                aria-label="Hide upload form"
+                aria-expanded="true"
+                {% else %}
+                aria-label="Show upload form"
+                aria-expanded="false"
+                {% endif %}
+                title="Upload a file"
+                aria-controls="upload-form"
+                data-panel-toggle="upload-form">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M12 16V4m0 0L7 9m5-5 5 5M5 14v5h14v-5"
+                        fill="none" stroke="currentColor" stroke-linecap="round"
+                        stroke-linejoin="round" stroke-width="2"/>
+                </svg>
+            </button>
+            <button
+                class="upload-toggle"
+                type="button"
+                aria-label="Show uploaded files"
+                aria-expanded="false"
+                title="Uploaded files"
+                aria-controls="uploaded-files-panel"
+                data-panel-toggle="uploaded-files-panel">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M3 6.5A1.5 1.5 0 0 1 4.5 5h5l2 2h8A1.5 1.5 0 0 1 21 8.5v10a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 18.5z"
+                        fill="none" stroke="currentColor" stroke-linecap="round"
+                        stroke-linejoin="round" stroke-width="1.8"/>
+                </svg>
+            </button>
+        </div>
+        <form class="upload-form" id="upload-form" method="post" enctype="multipart/form-data"
+            {% if not upload_form.errors %}hidden{% endif %}>
+            {% csrf_token %}
+            <p>
+                <label for="{{ upload_form.category.id_for_label }}">Classification</label>
+                {{ upload_form.category }}
+                {{ upload_form.category.errors }}
+            </p>
+            <p>
+                <label for="{{ upload_form.file.id_for_label }}">File</label>
+                {{ upload_form.file }}
+                {{ upload_form.file.errors }}
+            </p>
+            <button type="submit">Upload file</button>
+        </form>
+        <div class="uploaded-files-panel" id="uploaded-files-panel" hidden>
+            <h2>Uploaded files</h2>
+            {% for category_name, category, category_documents in documents %}
+            <section class="uploaded-file-group" aria-labelledby="uploaded-category-{{ forloop.counter }}">
+                <h3 id="uploaded-category-{{ forloop.counter }}">{{ category_name }}</h3>
+                {% if category_documents %}
+                <ul class="uploaded-manager-list">
+                    {% for uploaded_document in category_documents %}
+                    <li>
+                        <a href="{% url 'document_uploads:file' uploaded_document.pk %}">
+                            {{ uploaded_document.original_name }}
+                        </a>
+                        <form method="post"
+                            action="{% url 'document_uploads:delete-upload' uploaded_document.pk %}"
+                            data-delete-upload
+                            data-document-name="{{ uploaded_document.original_name }}">
+                            {% csrf_token %}
+                            <button type="submit"
+                                class="uploaded-file-delete"
+                                aria-label="Delete {{ uploaded_document.original_name }}"
+                                title="Delete file">
+                                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                    <path d="M4 7h16m-10 4v6m4-6v6M6 7l1 14h10l1-14M9 7V4h6v3"
+                                        fill="none" stroke="currentColor" stroke-linecap="round"
+                                        stroke-linejoin="round" stroke-width="1.8"/>
+                                </svg>
+                            </button>
+                        </form>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="empty-category">No uploaded files.</p>
+                {% endif %}
+            </section>
+            {% empty %}
+            <p>No document categories are available.</p>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
     {% if user.is_authenticated %}
     <div class="navbar-account">
         <img class="profile-image" src="{% static 'img/user_profile.png' %}" alt="User profile">
