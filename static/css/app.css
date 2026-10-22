@@ -281,8 +281,11 @@ main {
 
 .document-list {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+    gap: 0.25rem;
+    padding: 0.5rem;
+    border: 1px solid #d5d5d5;
+    border-radius: 0.5rem;
 }
 
 .document-card,
@@ -292,11 +295,13 @@ main {
 }
 
 .document-card {
-    border-radius: 0.4rem;
+    padding: 0.65rem 0.75rem;
+    border: 0;
 }
 
 .document-card h2 {
-    margin-top: 0;
+    margin: 0;
+    font-size: 1rem;
 }
 
 .document-card h2 a {
@@ -478,18 +483,27 @@ form select {
     width: 100%;
     margin: 0 auto;
     padding: 2rem;
-    border: 1px solid #d5d5d5;
-    border-radius: 0.5rem;
-    box-shadow: 0 0.5rem 1.5rem #00000012;
+    border: 1px solid #42b9ff80;
+    border-radius: 1rem;
+    color: #eaf7ff;
+    background: #061329e8;
+    box-shadow: 0 0 2.5rem #008cff38, 0 1.5rem 4rem #00000080;
+    backdrop-filter: blur(12px);
 }
 
 .login-page {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    background: #07111f url("../img/background_design.gif") center / cover fixed no-repeat;
+}
+
+.login-page .navbar {
+    display: none;
 }
 
 .login-page .layout {
+    display: flex;
     flex: 1;
     align-items: center;
     justify-content: center;
@@ -501,19 +515,80 @@ form select {
 }
 
 .login-panel h1 {
-    margin-bottom: 0.5rem;
+    margin: 0.35rem 0 0.5rem;
+    color: #fff;
+    font-size: clamp(1.8rem, 5vw, 2.25rem);
+    letter-spacing: -0.04em;
+    text-shadow: 0 0 1.25rem #168fff80;
+}
+
+.login-intro {
+    margin: 0 0 1.75rem;
+    color: #a9c7e4;
 }
 
 .login-eyebrow {
-    color: #426b53;
+    margin: 0;
+    color: #45c1ff;
     font-size: 0.8rem;
     font-weight: 700;
     letter-spacing: 0.08em;
 }
 
+.login-panel form {
+    max-width: none;
+}
+
+.login-panel form p {
+    margin: 1rem 0;
+}
+
+.login-panel label {
+    color: #c9e4fa;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.login-panel input {
+    width: 100%;
+    border: 1px solid #5794c466;
+    border-radius: 0.55rem;
+    color: #f2f9ff;
+    background: #071b32;
+    font: inherit;
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.login-panel input:focus {
+    border-color: #42b9ff;
+    outline: none;
+    box-shadow: 0 0 0 3px #168fff38;
+}
+
 .login-panel form button {
     width: 100%;
-    padding: 0.7rem;
+    margin-top: 0.75rem;
+    padding: 0.8rem;
+    border: 1px solid #60ceff;
+    border-radius: 0.55rem;
+    color: #041427;
+    background: linear-gradient(135deg, #42c7ff, #2585ff);
+    font: inherit;
+    font-weight: 750;
+    cursor: pointer;
+    box-shadow: 0 0.5rem 1.5rem #168fff40;
+    transition: filter 150ms ease, box-shadow 150ms ease;
+}
+
+.login-panel form button:hover,
+.login-panel form button:focus-visible {
+    filter: brightness(1.12);
+    box-shadow: 0 0.6rem 1.75rem #168fff70;
+}
+
+.login-panel form button:focus-visible {
+    outline: 2px solid #b6eaff;
+    outline-offset: 3px;
 }
 
 .form-error {

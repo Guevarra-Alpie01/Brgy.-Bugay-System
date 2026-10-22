@@ -108,7 +108,6 @@
             <a href="{% url 'document_uploads:category' category %}">{{ name }}</a>
             {% endif %}
         </h2>
-        <p>{{ category_documents|length }} uploaded file{{ category_documents|length|pluralize }}</p>
     </article>
     {% endfor %}
 </div>
